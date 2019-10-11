@@ -1,10 +1,16 @@
 #!/bin/bash
 
-echo "hello world"
+input=$1
+profile=$2
+region=$3
 
-input="aws-resources.txt"
 while IFS= read -r line
 do
-  echo "$line"
+  count=$(aws configservice get-discovered-resource-counts \
+	  --resource-type $line \
+	  --profile $profile \
+	  --region $region \
+	  --query "totalDiscoveredResources")
+  echo "$line = $count"
 done < "$input"
 
